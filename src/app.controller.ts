@@ -3,7 +3,7 @@ import { AppService } from './app.service';
 import { PrismaService } from './prisma/prisma.service';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Status')
+@ApiTags()
 @Controller()
 export class AppController {
   constructor(
