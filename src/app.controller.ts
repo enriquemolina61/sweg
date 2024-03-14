@@ -1,7 +1,9 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PrismaService } from './prisma/prisma.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Status')
 @Controller()
 export class AppController {
   constructor(
@@ -9,18 +11,11 @@ export class AppController {
     private  prisma: PrismaService
     ) {}
 
-  @Get("/hello")
-  getHello(): string {
-    return this.appService.getHello();
+  @Get("/status")
+  getAppStatus(): string {
+    return this.appService.getAppStatus();
   }
 
-  @Post("/createUser")
-  async createUser(): Promise<any> {
-    return await this.prisma.createUser({
-      name: "Alice",
-      email: "",
-    });
-  }
 
-  
+
 }
