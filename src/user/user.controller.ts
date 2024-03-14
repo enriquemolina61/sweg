@@ -1,25 +1,37 @@
-import { Controller, Post, Body, Get, Param, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
+import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '@prisma/client';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
-@Controller('users')
+@Controller('user')
 export class UserController {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.prismaService.createUser(createUserDto);
+  @ApiOperation({
+    summary: 'Criar um usuário',
+  })
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
   }
 
-  @Get(':id')
-  async getUserById(@Param('id') id: string): Promise<User> {
-    const user = await this.prismaService.getUserById(id);
-    if (!user) {
-      throw new NotFoundException(`User with ID '${id}' not found`);
-    }
-    return user;
+  @Get()
+  @ApiOperation({
+    summary: 'Listar todos os usuários',
+  })
+  findAll() {
+    return this.userService.findAll();
   }
+
 }
