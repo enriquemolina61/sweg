@@ -3,7 +3,7 @@ import { AppService } from './app.service';
 import { PrismaService } from './prisma/prisma.service';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags()
+@ApiTags('Status')
 @Controller()
 export class AppController {
   constructor(
@@ -11,7 +11,7 @@ export class AppController {
     private  prisma: PrismaService
     ) {}
 
-  @Get("/status")
+  @Get()
   getAppStatus(): string {
     return this.appService.getAppStatus();
   }
