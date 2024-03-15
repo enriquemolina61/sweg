@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Company } from './entities/company.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CompanyService {
   create(createCompanyDto: CreateCompanyDto) {
-    return 'This action adds a new company';
+    throw new Error('Method not implemented.');
   }
+  constructor(private readonly prisma: PrismaService) {}
+  // create(createCompanyDto: CreateCompanyDto):Promise<Company> {
+  //   const data:Company = {...createCompanyDto, userId};
+
+  //   return this.prisma.company.create({data})
+  // }
 
   findAll() {
-    return `This action returns all company`;
+    return this.prisma.company.findMany();
   }
 
   findOne(id: number) {

@@ -1,4 +1,4 @@
-import { Company, Plant } from "@prisma/client";
+import { Company } from "@prisma/client";
 
 export class User {
   id?: string;
@@ -8,8 +8,6 @@ export class User {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
-  companyId?: number;
-  plants?: Plant[];
-  company?: Company;
+  company?: Company[];
 }
 
