@@ -19,9 +19,9 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post()
-  create(@Body() createCompanyDto: CreateCompanyDto) {
+  async create(@Body() createCompanyDto: CreateCompanyDto) {
     try {
-      return this.companyService.create(createCompanyDto);
+      return await this.companyService.create(createCompanyDto);
     } catch (error) {
       exceptionsFilter(error);
     }

@@ -9,7 +9,7 @@ import { Prisma } from "@prisma/client";
 export class CompanyService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createCompanyDto: CreateCompanyDto): Promise<Company> {
+  async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
     const { ownerId, ...dataCompany } = createCompanyDto;
     const data: Prisma.CompanyCreateInput = {
       ...dataCompany,
