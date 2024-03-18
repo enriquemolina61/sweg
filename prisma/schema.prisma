@@ -8,42 +8,42 @@ datasource db {
 }
 
 model User {
-  id          String      @id @default(uuid())
+  id          String    @id @default(uuid())
   email       String
   phoneNumber String
   name        String
   companies   Company[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Company {
-  id        String      @id @default(uuid())
-  name      String
-  cnpj      String
-  site      String
-  ownerId   String
-  owner     User    @relation(fields: [ownerId], references: [id])
-  plants    Plant[]
+  id          String   @id @default(uuid())
+  name        String
+  cnpj        String   @unique
+  site        String
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  plants      Plant[]
   performance Float?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Plant {
-  id                  String      @id @default(uuid())
-  capacity            Float
-  contactMethod       String?
-  contactPerson       String?
-  gridConnectionDate  DateTime
-  latitude            String
-  longitude           String
-  plantAddress        String
-  plantCode           String   @unique
-  plantName           String
-  performance         Float?
-  enterpriseId        String
-  company             Company @relation(fields: [enterpriseId], references: [id])
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                 String   @id @default(uuid())
+  capacity           Float
+  contactMethod      String?
+  contactPerson      String?
+  gridConnectionDate DateTime
+  latitude           String
+  longitude          String
+  plantAddress       String
+  plantCode          String   @unique
+  plantName          String
+  performance        Float?
+  enterpriseId       String
+  company            Company  @relation(fields: [enterpriseId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
