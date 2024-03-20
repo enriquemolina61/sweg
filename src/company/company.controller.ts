@@ -64,13 +64,11 @@ export class CompanyController {
   @Delete(":id/:ownerId")
   async remove(@Param("id") id: string, @Param("ownerId") ownerId: string) {
     try {
-      // Verificar se o ownerId fornecido é válido
       const company = await this.companyService.findOne(id);
       if (!company) {
         throw new Error(`Company with id ${id} not found`);
       }
 
-      // Verificar se o ownerId fornecido corresponde ao ownerId da empresa
       if (company.ownerId.toString() !== ownerId) {
         return { Error: "Only the owner can delete the company" };
       }
