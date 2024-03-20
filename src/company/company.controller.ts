@@ -47,8 +47,7 @@ export class CompanyController {
         id,
         updateCompanyDto,
       );
-      // Se o DTO de atualização contiver um campo 'performance'
-      // você pode chamar um método de serviço para atualizar a performance
+
       if ("performance" in updateCompanyDto) {
         await this.companyService.updatePerformance(
           id,
