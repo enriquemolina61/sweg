@@ -44,7 +44,16 @@ export class CompanyService {
     });
   }
 
-  async remove(id: string): Promise<Company> {
+  async remove(id: string, ownerId: string): Promise<Company> {
+    const company = await this.findOne(id);
+    if (!company) {
+      throw new Error(`Company with id ${id} not found`);
+    }
+
+    if (company.ownerId !== ownerId) {
+      throw new Error(`Only the owner can delete the company`);
+    }
+
     return this.prisma.company.delete({
       where: { id },
     });
