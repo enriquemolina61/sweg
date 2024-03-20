@@ -19,12 +19,12 @@ export class CompanyService {
     return this.prisma.company.create({ data });
   }
 
-  findAll(): Promise<Company[]> {
-    return this.prisma.company.findMany();
+  async findAll(): Promise<Company[]> {
+    return await this.prisma.company.findMany();
   }
 
-  findOne(id: string): Promise<Company | null> {
-    return this.prisma.company.findUnique({
+  async findOne(id: string) {
+    return await this.prisma.company.findUnique({
       where: { id },
     });
   }

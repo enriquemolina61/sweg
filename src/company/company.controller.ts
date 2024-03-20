@@ -29,7 +29,11 @@ export class CompanyController {
 
   @Get()
   findAll() {
-    return this.companyService.findAll();
+    try {
+      return this.companyService.findAll();
+    } catch (error) {
+      exceptionsFilter(error);
+    }
   }
 
   @Get(":id")

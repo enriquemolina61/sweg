@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePlantDto } from './dto/create-plant.dto';
-import { UpdatePlantDto } from './dto/update-plant.dto';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreatePlantDto } from "./dto/create-plant.dto";
+import { Plant } from "./entities/plant.entity";
+import { UpdatePlantPerformanceDto } from "./dto/update-plant-performance.dto";
 
 @Injectable()
 export class PlantService {
-  create(createPlantDto: CreatePlantDto) {
-    return 'This action adds a new plant';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createPlantDto: CreatePlantDto): Promise<Plant> {
+    const { enterpriseId, ...plantData } = createPlantDto;
+
+    return this.prisma.plant.create({
+      data: {
+        ...plantData,
+        enterpriseId,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all plant`;
+  async findPlantsByCompany(companyId: string): Promise<Plant[]> {
+    return this.prisma.plant.findMany({
+      where: {
+        enterpriseId: companyId,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} plant`;
+  async sumPlantsByCompany(companyId: string): Promise<number> {
+    const plants = await this.findPlantsByCompany(companyId);
+    return plants.length;
   }
 
-  update(id: number, updatePlantDto: UpdatePlantDto) {
-    return `This action updates a #${id} plant`;
+  async sumCapacityByCompany(): Promise<number[]> {
+    const companies = await this.prisma.company.findMany();
+    const sumCapacities = await Promise.all(
+      companies.map(async (company) => {
+        const plants = await this.findPlantsByCompany(company.id);
+        return plants.reduce((acc, plant) => acc + plant.capacity, 0);
+      }),
+    );
+    return sumCapacities;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} plant`;
+  async updatePerformance(
+    id: string,
+    updatePerformance: UpdatePlantPerformanceDto,
+  ): Promise<Plant> {
+    const data = updatePerformance;
+    return this.prisma.plant.update({
+      where: { id },
+      data,
+    });
   }
 }

@@ -1,34 +1,52 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PlantService } from './plant.service';
-import { CreatePlantDto } from './dto/create-plant.dto';
-import { UpdatePlantDto } from './dto/update-plant.dto';
+import { Controller, Get, Post, Body, Param, Patch } from "@nestjs/common";
+import { PlantService } from "./plant.service";
+import { CreatePlantDto } from "./dto/create-plant.dto";
+import { Plant } from "./entities/plant.entity";
+import { ApiTags } from "@nestjs/swagger";
+import { exceptionsFilter } from "src/helpers/exceptions.helper";
+import { UpdatePlantPerformanceDto } from "./dto/update-plant-performance.dto";
 
-@Controller('plant')
+@ApiTags("Plant")
+@Controller("plant")
 export class PlantController {
   constructor(private readonly plantService: PlantService) {}
 
   @Post()
-  create(@Body() createPlantDto: CreatePlantDto) {
-    return this.plantService.create(createPlantDto);
+  async create(@Body() createPlantDto: CreatePlantDto) {
+    try {
+      return await this.plantService.create(createPlantDto);
+    } catch (error) {
+      exceptionsFilter(error);
+    }
   }
 
-  @Get()
-  findAll() {
-    return this.plantService.findAll();
+  @Get("company/:companyId")
+  async findPlantsByCompany(
+    @Param("companyId") companyId: string,
+  ): Promise<Plant[]> {
+    return this.plantService.findPlantsByCompany(companyId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.plantService.findOne(+id);
+  @Get("company/:companyId/sum")
+  async sumPlantsByCompany(
+    @Param("companyId") companyId: string,
+  ): Promise<number> {
+    return this.plantService.sumPlantsByCompany(companyId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlantDto: UpdatePlantDto) {
-    return this.plantService.update(+id, updatePlantDto);
+  @Get("sum-capacity")
+  async sumCapacityByCompany(): Promise<number[]> {
+    return this.plantService.sumCapacityByCompany();
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.plantService.remove(+id);
+  @Patch(":id/performance")
+  async updatePerformance(
+    @Param("id") id: string,
+    @Body() updatePlantPerformanceDto: UpdatePlantPerformanceDto,
+  ): Promise<Plant> {
+    return await this.plantService.updatePerformance(
+      id,
+      updatePlantPerformanceDto,
+    );
   }
 }
