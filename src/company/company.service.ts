@@ -19,22 +19,54 @@ export class CompanyService {
     return this.prisma.company.create({ data });
   }
 
-  findAll() {
+  findAll(): Promise<Company[]> {
     return this.prisma.company.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+  findOne(id: string): Promise<Company | null> {
+    return this.prisma.company.findUnique({
+      where: { id },
+    });
   }
 
-  update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company with ${JSON.stringify(
-      updateCompanyDto,
-    )}
-      `;
+  async update(
+    id: string,
+    updateCompanyDto: UpdateCompanyDto,
+  ): Promise<Company> {
+    const company = await this.findOne(id);
+    if (!company) {
+      throw new Error(`Company with id ${id} not found`);
+    }
+
+    return this.prisma.company.update({
+      where: { id },
+      data: updateCompanyDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} company`;
+  async remove(id: string): Promise<Company> {
+    return this.prisma.company.delete({
+      where: { id },
+    });
+  }
+
+  async updatePerformance(
+    id: string,
+    performance: number,
+    ownerId: string,
+  ): Promise<Company> {
+    const company = await this.findOne(id);
+    if (!company) {
+      throw new Error(`Company with id ${id} not found`);
+    }
+
+    if (company.ownerId !== ownerId) {
+      throw new Error(`Only the owner can update the performance`);
+    }
+
+    return this.prisma.company.update({
+      where: { id },
+      data: { performance },
+    });
   }
 }

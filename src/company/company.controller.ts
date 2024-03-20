@@ -34,16 +34,36 @@ export class CompanyController {
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.companyService.findOne(+id);
+    return this.companyService.findOne(id);
   }
 
   @Patch(":id")
-  update(@Param("id") id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return this.companyService.update(+id, updateCompanyDto);
+  async update(
+    @Param("id") id: string,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+  ) {
+    try {
+      const updatedCompany = await this.companyService.update(
+        id,
+        updateCompanyDto,
+      );
+      // Se o DTO de atualização contiver um campo 'performance'
+      // você pode chamar um método de serviço para atualizar a performance
+      if ("performance" in updateCompanyDto) {
+        await this.companyService.updatePerformance(
+          id,
+          updateCompanyDto.performance,
+          updateCompanyDto.ownerId,
+        );
+      }
+      return updatedCompany;
+    } catch (error) {
+      exceptionsFilter(error);
+    }
   }
 
   @Delete(":id")
   remove(@Param("id") id: string) {
-    return this.companyService.remove(+id);
+    return this.companyService.remove(id);
   }
 }
