@@ -44,29 +44,6 @@ export class CompanyController {
     return this.companyService.findOne(id);
   }
 
-  // @Patch(":id")
-  // async update(
-  //   @Param("id") id: string,
-  //   @Body() updateCompanyDto: UpdateCompanyDto,
-  // ) {
-  //   try {
-  //     const updatedCompany = await this.companyService.update(
-  //       id,
-  //       updateCompanyDto,
-  //     );
-
-  //     if ("performance" in updateCompanyDto) {
-  //       await this.companyService.updatePerformance(
-  //         id,
-  //         updateCompanyDto.performance,
-  //         updateCompanyDto.ownerId,
-  //       );
-  //     }
-  //     return updatedCompany;
-  //   } catch (error) {
-  //     exceptionsFilter(error);
-  //   }
-  // }
 
   @Delete(":id/:ownerId")
   async remove(@Param("id") id: string, @Param("ownerId") ownerId: string) {
