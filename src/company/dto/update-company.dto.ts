@@ -1,15 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsUUID } from "class-validator";
+import { IsNotEmpty, IsUUID } from "class-validator";
 
 export class UpdateCompanyDto {
-  @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty({
-    description: "Performance da empresa",
-    example: 10,
-  })
-  performance: number;
-
   @IsNotEmpty()
   @IsUUID("all")
   @ApiProperty({
@@ -17,4 +9,18 @@ export class UpdateCompanyDto {
     example: `123e4567-e89b-12d3-a456-426614174000`,
   })
   ownerId: string;
+
+  @IsNotEmpty()
+  @ApiProperty({
+    description: "Nome da empresa",
+    example: "Empresa XPTO",
+  })
+  name: string;
+
+  @IsNotEmpty()
+  @ApiProperty({
+    description: "Endereço da empresa",
+    example: "Rua XPTO, 123",
+  })
+  site: string;
 }

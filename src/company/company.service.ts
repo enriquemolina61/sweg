@@ -77,5 +77,22 @@ export class CompanyService {
       where: { id },
       data: { performance },
     });
+
   }
+
+  async updateInfo(
+    id: string,
+  UpdateCompanyDto: UpdateCompanyDto,
+  ): Promise<Company> {
+    const company = await this.findOne(id);
+    if (!company) {
+      throw new Error(`Company with id ${id} not found`);
+    }
+    return this.prisma.company.update({
+      where: { id },
+      data:  UpdateCompanyDto,
+    });
+  }
+
+
 }
