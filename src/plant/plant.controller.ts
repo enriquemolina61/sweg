@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, Patch, BadRequestException } from "@nestjs/common";
 import { PlantService } from "./plant.service";
 import { CreatePlantDto } from "./dto/create-plant.dto";
 import { Plant } from "./entities/plant.entity";
@@ -38,6 +38,20 @@ export class PlantController {
   async sumCapacityByCompany(): Promise<number[]> {
     return this.plantService.sumCapacityByCompany();
   }
+
+  @Get(':companyId/sum-capacity')
+  async sumCapacityByCompanyId(@Param('companyId') companyId: string): Promise<number> {
+    try {
+      const sumCapacity = await this.plantService.sumCapacityByCompanyId(companyId);
+      return sumCapacity;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException(error.message);
+    }
+  }
+
 
   @Patch(":id/performance")
   async updatePerformance(

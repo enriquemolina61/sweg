@@ -43,6 +43,12 @@ export class PlantService {
     return sumCapacities;
   }
 
+  async sumCapacityByCompanyId(companyId: string): Promise<number> {
+    const plants = await this.findPlantsByCompany(companyId);
+    const sumCapacity = plants.reduce((acc, plant) => acc + plant.capacity, 0);
+    return sumCapacity;
+}
+
   async updatePerformance(
     id: string,
     updatePerformance: UpdatePlantPerformanceDto,
